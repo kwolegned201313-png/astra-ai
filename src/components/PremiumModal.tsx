@@ -246,19 +246,19 @@ export default function PremiumModal({ isOpen, onClose, onSuccess, reason }: Pre
                     <div>
                       <h4 className="text-xs font-bold text-slate-800">Astra AI Unlimited Pass</h4>
                       <p className="text-[10px] text-slate-400 mt-0.5">
-                        {currency === "KRW" ? "모든 제작 가사 도구 무제한 가동 승인" : "Dissolve computing throttles permanently"}
+                        {currency === "KRW" ? "모든 미디어 제작 도구 1년간 무제한 가동 승인" : "Dissolve computing throttles for 1 full year"}
                       </p>
                     </div>
                     <div className="text-right">
                       {currency === "KRW" ? (
                         <>
                           <span className="text-base font-bold text-indigo-600">₩20,000</span>
-                          <span className="text-[10px] text-slate-400 block">/ 일회성 영구</span>
+                          <span className="text-[10px] text-slate-400 block">/ 1년 무제한</span>
                         </>
                       ) : (
                         <>
                           <span className="text-base font-bold text-indigo-600">${usdPrice} USD</span>
-                          <span className="text-[10px] text-slate-400 block">/ Lifetime</span>
+                          <span className="text-[10px] text-slate-400 block">/ 1 Year</span>
                         </>
                       )}
                     </div>
@@ -288,11 +288,11 @@ export default function PremiumModal({ isOpen, onClose, onSuccess, reason }: Pre
                       </span>
                     </div>
                     <div>
-                      • {currency === "KRW" ? "예금주:" : "Account Holder:"} <span className="font-bold text-slate-800">Kwon Dae-Hyeon (Nexa Labs)</span>
+                      • {currency === "KRW" ? "예금주:" : "Account Holder:"} <span className="font-bold text-slate-800">김우신 (Kim Wooshin / Nexa Labs)</span>
                     </div>
                     <div>
-                      • {currency === "KRW" ? "정가:" : "Price:"}{" "}
-                      <span className="font-bold text-indigo-600">₩20,000 / ${usdPrice} USD</span>
+                      • {currency === "KRW" ? "이용 기간 및 요금:" : "Duration & Fee:"}{" "}
+                      <span className="font-bold text-indigo-600">{currency === "KRW" ? "1년 무제한이용 / ₩20,000" : "1 Year Unlimited / $" + usdPrice + " USD"}</span>
                     </div>
                   </div>
                 </div>
@@ -395,7 +395,7 @@ export default function PremiumModal({ isOpen, onClose, onSuccess, reason }: Pre
 
                         <div className="text-xs text-slate-500">{currency === "KRW" ? "자산 수신 예금주:" : "Account Holder:"}</div>
                         <div className="col-span-2 text-xs font-bold text-slate-800">
-                          Kwon Dae-Hyeon (권대현 / Nexa Labs)
+                          김우신 (Kim Wooshin / Nexa Labs 대표)
                         </div>
 
                         <div className="text-xs text-slate-500">{currency === "KRW" ? "지정 청구 총액:" : "Final Charge Amount:"}</div>

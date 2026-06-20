@@ -8,6 +8,8 @@ export interface UserProfile {
   joinedAt: string;
   isGuest?: boolean;
   isSimulated?: boolean;
+  isPremium?: boolean;
+  premiumUntil?: string;
 }
 
 export interface Message {
