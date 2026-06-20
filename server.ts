@@ -27,7 +27,7 @@ const ai = new GoogleGenAI({
 // API endpoint: Multi-modal Chat with Nova AI
 app.post("/api/chat", async (req, res) => {
   try {
-    const { message, history, imageBase64, imageMimeType } = req.body;
+    const { message, history, imageBase64, imageMimeType, stream } = req.body;
 
     if (!message) {
       return res.status(400).json({ error: "Message is required." });
@@ -45,7 +45,7 @@ app.post("/api/chat", async (req, res) => {
       "Provide precise, inspiring, and detailed text. Use clear markdown formatting for structure. " +
       "You support images and text. Always maintain a luxurious, highly-confident corporate brand image of Nexa Labs.";
 
-    let responseText = "";
+    let contents: any;
 
     if (imageBase64 && imageMimeType) {
       // Vision-based single turn query
@@ -58,13 +58,7 @@ app.post("/api/chat", async (req, res) => {
       const textPart = {
         text: message,
       };
-
-      const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
-        contents: { parts: [imagePart, textPart] },
-        config: { systemInstruction },
-      });
-      responseText = response.text || "";
+      contents = { parts: [imagePart, textPart] };
     } else {
       // Normal dialog chat session
       const chatHistory = (history || []).map((msg: any) => ({
@@ -77,16 +71,41 @@ app.post("/api/chat", async (req, res) => {
         role: "user",
         parts: [{ text: message }],
       });
-
-      const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
-        contents: chatHistory,
-        config: { systemInstruction },
-      });
-      responseText = response.text || "";
+      contents = chatHistory;
     }
 
-    res.json({ text: responseText });
+    if (stream) {
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("Connection", "keep-alive");
+
+      try {
+        const responseStream = await ai.models.generateContentStream({
+          model: "gemini-3.5-flash",
+          contents,
+          config: { systemInstruction },
+        });
+
+        for await (const chunk of responseStream) {
+          const text = chunk.text || "";
+          res.write(`data: ${JSON.stringify({ text })}\n\n`);
+        }
+        res.write("data: [DONE]\n\n");
+        res.end();
+      } catch (streamError: any) {
+        console.error("Stream generation error:", streamError);
+        res.write(`data: ${JSON.stringify({ error: streamError.message })}\n\n`);
+        res.end();
+      }
+    } else {
+      const response = await ai.models.generateContent({
+        model: "gemini-3.5-flash",
+        contents,
+        config: { systemInstruction },
+      });
+      const responseText = response.text || "";
+      res.json({ text: responseText });
+    }
   } catch (error: any) {
     console.error("Chat API error:", error);
     res.status(500).json({ 
