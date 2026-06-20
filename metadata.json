@@ -1,0 +1,6 @@
+{
+  "name": "Nexa Labs Astra AI",
+  "description": "Nexa Labs의 차세대 초지능 인공지능 플랫폼 'Astra AI'. 고성능 멀티모달 대화, 프롬프트 기반 이미지 생성, 영화적 동영상 생성 시뮬레이션, 라이브 샌드박스 코드 생성기 및 시스템 분석 대시보드를 제공하는 완전한 솔루션입니다.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
